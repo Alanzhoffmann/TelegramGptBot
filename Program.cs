@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Telegram.Bot;
-using Telegram.Bot.Types.Enums;
 using TelegramGptBot;
 
 var config = new ConfigurationBuilder()
@@ -17,19 +16,7 @@ Console.WriteLine(me.Username);
 
 using CancellationTokenSource cancellationTokenSource = new();
 
-botClient.StartReceiving((client, update, token) =>
-{
-    if (update.Message?.Type == MessageType.Text)
-    {
-        var message = update.Message;
-
-        var sentMessage = client.SendTextMessageAsync(message.Chat.Id, "Hello!", cancellationToken: token);
-    }
-},
-(client, exception, token) =>
-{
-
-}, cancellationToken: cancellationTokenSource.Token);
+botClient.StartReceiving<UpdateHandler>(cancellationToken: cancellationTokenSource.Token);
 
 Console.ReadLine();
 
